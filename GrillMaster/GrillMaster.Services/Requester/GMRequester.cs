@@ -17,11 +17,11 @@ namespace GrillMaster.Services.Requester
         /// <summary>
         ///     Server base uri.
         /// </summary>
-        private static readonly Uri serverBaseUri = new Uri(Properties.Settings.Default.ServerBaseUri);
+        private static readonly Uri ServerBaseUri = new Uri(Properties.Settings.Default.ServerBaseUri);
         /// <summary>
         ///     User credantials.
         /// </summary>
-        private static CredentialCache Cache;
+        private static CredentialCache _cache;
 
         #region [Constructors]
 
@@ -60,11 +60,11 @@ namespace GrillMaster.Services.Requester
         ///     Initiate necessary properties for requests.
         /// </summary>
         /// <param name="userName">User name(login).</param>
-        /// <param name="password">User password.</param>
+        /// <param name="userPassword">User password.</param>
         private static void InitProperties(string userName, string userPassword)
         {
             var serviceCreds = new NetworkCredential(userName, userPassword);
-            Cache = new CredentialCache { { serverBaseUri, "Basic", serviceCreds } };
+            _cache = new CredentialCache { { ServerBaseUri, "Basic", serviceCreds } };
         }
 
         /// <summary>
@@ -74,9 +74,9 @@ namespace GrillMaster.Services.Requester
         /// <returns>Responce stream.</returns>
         private static Stream CreateRequest(string entityUriParameter)
         {
-            var resultUri = new Uri(string.Format("{0}/{1}", serverBaseUri, entityUriParameter));
+            var resultUri = new Uri(string.Format("{0}/{1}", ServerBaseUri, entityUriParameter));
             var httpRequest = (HttpWebRequest)WebRequest.Create(resultUri);
-            httpRequest.Credentials = Cache;
+            httpRequest.Credentials = _cache;
 
             var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
             return httpResponse.GetResponseStream();
