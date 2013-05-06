@@ -47,6 +47,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GrillMaster.Core\GrillMaster.Core.csproj">
+      <Project>{8fbd5f51-1115-4cc9-9e83-b5b8af6f3fbb}</Project>
+      <Name>GrillMaster.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GrillMaster.Services\GrillMaster.Services.csproj">
+      <Project>{f5dd16ef-b65f-448f-baa6-6c0b3bf1f39c}</Project>
+      <Name>GrillMaster.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

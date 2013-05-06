@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrillMaster", "GrillMaster\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrillMaster.Core", "GrillMaster.Core\GrillMaster.Core.csproj", "{8FBD5F51-1115-4CC9-9E83-B5B8AF6F3FBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrillMaster.Services", "GrillMaster.Services\GrillMaster.Services.csproj", "{F5DD16EF-B65F-448F-BAA6-6C0B3BF1F39C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{8FBD5F51-1115-4CC9-9E83-B5B8AF6F3FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FBD5F51-1115-4CC9-9E83-B5B8AF6F3FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FBD5F51-1115-4CC9-9E83-B5B8AF6F3FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5DD16EF-B65F-448F-BAA6-6C0B3BF1F39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5DD16EF-B65F-448F-BAA6-6C0B3BF1F39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5DD16EF-B65F-448F-BAA6-6C0B3BF1F39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5DD16EF-B65F-448F-BAA6-6C0B3BF1F39C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
