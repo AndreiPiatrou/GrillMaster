@@ -1,19 +1,17 @@
 ﻿#region [Imports]
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Xml;
+using GrillMaster.Core.Entities;
+using GrillMaster.Services.Parsers;
 
 #endregion
 
 namespace GrillMaster.Services.Requester
 {
-    using System.Collections.Generic;
-
-    using GrillMaster.Core.Entities;
-    using GrillMaster.Services.Parsers;
-
     /// <summary>
     ///     Server requester.
     /// </summary>
@@ -58,13 +56,34 @@ namespace GrillMaster.Services.Requester
         /// The load grill menus.
         /// </summary>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{T}"/>.
         /// </returns>
         public static List<GrillMenu> LoadGrillMenus()
         {
             var doc = MakeRequest("GrillMenus");
 
-            return XmlParser.ParseMenu(doc);
+            return XmlParser.ParseGrillMenus(doc);
+        }
+
+        public static List<GrillMenuItem> LoadGrillMenuItems()
+        {
+            var doc = MakeRequest("GrillMenuItems");
+
+            return XmlParser.ParseGrillMenuItems(doc);
+        }
+
+        public static List<GrillMenuItem> LoadGrillMenuItems(string menuItenLink)
+        {
+            var doc = MakeRequest(menuItenLink);
+
+            return XmlParser.ParseGrillMenuItems(doc);
+        }
+
+        public static List<GrillMenuQuantity> LoadGrillMenuQuantities(string quantitiesLink)
+        {
+            var doc = MakeRequest(quantitiesLink);
+
+            return XmlParser.ParseGrillMenuQuantities(doc);
         }
 
         /// <summary>

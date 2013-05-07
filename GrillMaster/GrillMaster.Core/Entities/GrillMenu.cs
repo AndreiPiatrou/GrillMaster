@@ -14,7 +14,7 @@ namespace GrillMaster.Core.Entities
     {
         #region [Private fields]
 
-        private List<GrillMenuItem> menuItems;
+        private List<Tuple<int, GrillMenuItem>> menuItems;
         private Guid id;
         private string name;
 
@@ -32,7 +32,7 @@ namespace GrillMaster.Core.Entities
         /// The name.
         /// </param>
         public GrillMenu(Guid id, string name)
-            : this(id, name, new List<GrillMenuItem>())
+            : this(id, name, new List<Tuple<int, GrillMenuItem>>())
         {
         }
 
@@ -48,18 +48,18 @@ namespace GrillMaster.Core.Entities
         /// <param name="menuItems">
         /// The menu items.
         /// </param>
-        public GrillMenu(Guid id, string name, IEnumerable<GrillMenuItem> menuItems)
+        public GrillMenu(Guid id, string name, IEnumerable<Tuple<int, GrillMenuItem>> menuItems)
         {
             this.id = id;
             this.name = name;
-            this.menuItems = new List<GrillMenuItem>(menuItems);
+            this.menuItems = new List<Tuple<int, GrillMenuItem>>(menuItems);
         }
 
         #endregion
 
         #region [Properties]
 
-        public List<GrillMenuItem> MenuItems
+        public List<Tuple<int, GrillMenuItem>> MenuItems
         {
             get { return menuItems; }
             set { menuItems = value; }
@@ -79,6 +79,11 @@ namespace GrillMaster.Core.Entities
             {
                 return name;
             }
+        }
+
+        public string GetMenuQuantitiesLink
+        {
+            get { return string.Format("GrillMenus(guid'{0}')/GrillMenuItemQuantity", id); }
         }
 
         #endregion

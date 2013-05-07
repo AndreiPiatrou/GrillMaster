@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Entities\GrillMenu.cs" />
     <Compile Include="Entities\GrillMenuItem.cs" />
+    <Compile Include="Entities\GrillMenuQuantity.cs" />
     <Compile Include="Entities\IIdentify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

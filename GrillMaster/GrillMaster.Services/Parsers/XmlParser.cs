@@ -1,5 +1,6 @@
 ﻿#region [Imports]
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -9,9 +10,7 @@ using GrillMaster.Core.Entities;
 
 namespace GrillMaster.Services.Parsers
 {
-    using System;
-
-    /// <summary>
+   /// <summary>
     /// The xml parser.
     /// </summary>
     public class XmlParser
@@ -36,9 +35,37 @@ namespace GrillMaster.Services.Parsers
         public static List<GrillMenuItem> ParseGrillMenuItems(XmlDocument xmlDocument)
         {
             var menuItemsNodes = xmlDocument.LastChild.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry").ToList();
+            menuItemsNodes.AddRange(xmlDocument.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry"));
             var manager = CreateXmlManager(xmlDocument);
 
             return (from XmlNode node in menuItemsNodes select ParseGrillMenuItem(node, manager)).ToList();
+        }
+
+        public static List<GrillMenuQuantity> ParseGrillMenuQuantities(XmlDocument xmlDocument)
+        {
+            var menuItemsNodes = xmlDocument.LastChild.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry").ToList();
+            var manager = CreateXmlManager(xmlDocument);
+
+            return (from XmlNode node in menuItemsNodes select ParseGrillMenuQuantity(node, manager)).ToList();
+        }
+
+        private static GrillMenuQuantity ParseGrillMenuQuantity(XmlNode menuNode, XmlNamespaceManager manager)
+        {
+            var guid = Guid.Empty;
+            var quantity = 0;
+
+            foreach (XmlNode childNode in menuNode.ChildNodes)
+            {
+                switch (childNode.Name)
+                {
+                    case "content":
+                        guid = XmlConvert.ToGuid(childNode.SelectSingleNode("m:properties/d:Id", manager).InnerText);
+                        quantity = Convert.ToInt32(childNode.SelectSingleNode("m:properties/d:Quantity", manager).InnerText);
+                        break;
+                }
+            }
+
+            return new GrillMenuQuantity(guid, quantity);
         }
 
         private static GrillMenuItem ParseGrillMenuItem(XmlNode menuNode, XmlNamespaceManager manager)
