@@ -9,6 +9,11 @@ using System.Xml;
 
 namespace GrillMaster.Services.Requester
 {
+    using System.Collections.Generic;
+
+    using GrillMaster.Core.Entities;
+    using GrillMaster.Services.Parsers;
+
     /// <summary>
     ///     Server requester.
     /// </summary>
@@ -18,8 +23,9 @@ namespace GrillMaster.Services.Requester
         ///     Server base uri.
         /// </summary>
         private static readonly Uri ServerBaseUri = new Uri(Properties.Settings.Default.ServerBaseUri);
+
         /// <summary>
-        ///     User credantials.
+        ///     User credentials.
         /// </summary>
         private static CredentialCache _cache;
 
@@ -35,21 +41,43 @@ namespace GrillMaster.Services.Requester
         #region [Public methods]
 
         /// <summary>
+        /// The initialize requester.
+        /// </summary>
+        /// <param name="userName">
+        /// The user name.
+        /// </param>
+        /// <param name="password">
+        /// The password.
+        /// </param>
+        public static void InitRequester(string userName, string password)
+        {
+            InitProperties(userName, password);
+        }
+
+        /// <summary>
+        /// The load grill menus.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        public static List<GrillMenu> LoadGrillMenus()
+        {
+            var doc = MakeRequest("GrillMenus");
+
+            return XmlParser.ParseMenu(doc);
+        }
+
+        /// <summary>
         ///     Make request.
         /// </summary>
         /// <param name="entityUriParameter">Entity name.</param>
-        /// <returns>Xml responce.</returns>
-        public static XmlDocument MakeRequest(string entityUriParameter)
+        /// <returns>Xml response.</returns>
+        private static XmlDocument MakeRequest(string entityUriParameter)
         {
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(CreateRequest(entityUriParameter));
 
             return xmlDocument;
-        }
-
-        public static void InitRequester(string userName, string password)
-        {
-            InitProperties(userName, password);
         }
 
         #endregion

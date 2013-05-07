@@ -22,6 +22,32 @@ namespace GrillMaster.Core.Entities
 
         #region [Constructors]
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GrillMenu"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        public GrillMenu(Guid id, string name)
+            : this(id, name, new List<GrillMenuItem>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GrillMenu"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="menuItems">
+        /// The menu items.
+        /// </param>
         public GrillMenu(Guid id, string name, IEnumerable<GrillMenuItem> menuItems)
         {
             this.id = id;

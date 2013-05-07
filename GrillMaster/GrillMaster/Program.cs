@@ -1,21 +1,41 @@
-﻿using System;
+﻿#region [Imports]
+
+using System;
 using GrillMaster.Services.Requester;
+
+#endregion
 
 namespace GrillMaster
 {
+    /// <summary>
+    /// The program.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The user name.
+        /// </summary>
+        private const string UserName = "a.petrov@itransition.com";
+
+        /// <summary>
+        /// The password.
+        /// </summary>
+        private const string Password = "Pjxi6";
+
+        /// <summary>
+        /// The main.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
         private static void Main(string[] args)
         {
-            const string userName = "a.petrov@itransition.com";
-            const string password = "Pjxi6";
+            Console.WriteLine("User name: {0}", UserName);
+            Console.WriteLine("Password:  {0}", Password);
+            GMRequester.InitRequester(UserName, Password);
+            var menus = GMRequester.LoadGrillMenus();
 
-            Console.WriteLine("User name: {0}", userName);
-            Console.WriteLine("Password:  {0}", password);
-            GMRequester.InitRequester(userName, password);
-            var request = GMRequester.MakeRequest(string.Empty);
-
-            Console.WriteLine(request.InnerXml);
+            Console.WriteLine(menus.Count);
             Console.ReadKey();
         }
     }
