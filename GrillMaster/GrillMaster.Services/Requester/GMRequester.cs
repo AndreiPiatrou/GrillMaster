@@ -15,7 +15,7 @@ namespace GrillMaster.Services.Requester
     /// <summary>
     ///     Server requester.
     /// </summary>
-    public class GMRequester
+    public partial class GMRequester
     {
         /// <summary>
         ///     Server base uri.
@@ -25,7 +25,7 @@ namespace GrillMaster.Services.Requester
         /// <summary>
         ///     User credentials.
         /// </summary>
-        private static CredentialCache _cache;
+        private static CredentialCache cache;
 
         #region [Constructors]
 
@@ -53,40 +53,6 @@ namespace GrillMaster.Services.Requester
         }
 
         /// <summary>
-        /// The load grill menus.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="List{T}"/>.
-        /// </returns>
-        public static List<GrillMenu> LoadGrillMenus()
-        {
-            var doc = MakeRequest("GrillMenus");
-
-            return XmlParser.ParseGrillMenus(doc);
-        }
-
-        public static List<GrillMenuItem> LoadGrillMenuItems()
-        {
-            var doc = MakeRequest("GrillMenuItems");
-
-            return XmlParser.ParseGrillMenuItems(doc);
-        }
-
-        public static List<GrillMenuItem> LoadGrillMenuItems(string menuItenLink)
-        {
-            var doc = MakeRequest(menuItenLink);
-
-            return XmlParser.ParseGrillMenuItems(doc);
-        }
-
-        public static List<GrillMenuQuantity> LoadGrillMenuQuantities(string quantitiesLink)
-        {
-            var doc = MakeRequest(quantitiesLink);
-
-            return XmlParser.ParseGrillMenuQuantities(doc);
-        }
-
-        /// <summary>
         ///     Make request.
         /// </summary>
         /// <param name="entityUriParameter">Entity name.</param>
@@ -111,7 +77,7 @@ namespace GrillMaster.Services.Requester
         private static void InitProperties(string userName, string userPassword)
         {
             var serviceCreds = new NetworkCredential(userName, userPassword);
-            _cache = new CredentialCache { { ServerBaseUri, "Basic", serviceCreds } };
+            cache = new CredentialCache { { ServerBaseUri, "Basic", serviceCreds } };
         }
 
         /// <summary>
@@ -123,7 +89,7 @@ namespace GrillMaster.Services.Requester
         {
             var resultUri = new Uri(string.Format("{0}/{1}", ServerBaseUri, entityUriParameter));
             var httpRequest = (HttpWebRequest)WebRequest.Create(resultUri);
-            httpRequest.Credentials = _cache;
+            httpRequest.Credentials = cache;
 
             var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
             return httpResponse.GetResponseStream();

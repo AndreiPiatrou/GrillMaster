@@ -1,129 +1,16 @@
 ﻿#region [Imports]
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
-using GrillMaster.Core.Entities;
 
 #endregion
 
 namespace GrillMaster.Services.Parsers
 {
-   /// <summary>
+    /// <summary>
     /// The xml parser.
     /// </summary>
-    public class XmlParser
+    public partial class XmlParser
     {
-        /// <summary>
-        /// The parse menu.
-        /// </summary>
-        /// <param name="xmlDocument">
-        /// The xml document.
-        /// </param>
-        /// <returns>
-        /// The <see cref="GrillMenu[]"/>.
-        /// </returns>
-        public static List<GrillMenu> ParseGrillMenus(XmlDocument xmlDocument)
-        {
-            var menuesNode = xmlDocument.LastChild.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry").ToList();
-            var manager = CreateXmlManager(xmlDocument);
-
-            return (from XmlNode node in menuesNode select ParseMenu(node, manager)).ToList();
-        }
-
-        public static List<GrillMenuItem> ParseGrillMenuItems(XmlDocument xmlDocument)
-        {
-            var menuItemsNodes = xmlDocument.LastChild.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry").ToList();
-            menuItemsNodes.AddRange(xmlDocument.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry"));
-            var manager = CreateXmlManager(xmlDocument);
-
-            return (from XmlNode node in menuItemsNodes select ParseGrillMenuItem(node, manager)).ToList();
-        }
-
-        public static List<GrillMenuQuantity> ParseGrillMenuQuantities(XmlDocument xmlDocument)
-        {
-            var menuItemsNodes = xmlDocument.LastChild.ChildNodes.Cast<XmlNode>().Where(node => node.Name == "entry").ToList();
-            var manager = CreateXmlManager(xmlDocument);
-
-            return (from XmlNode node in menuItemsNodes select ParseGrillMenuQuantity(node, manager)).ToList();
-        }
-
-        private static GrillMenuQuantity ParseGrillMenuQuantity(XmlNode menuNode, XmlNamespaceManager manager)
-        {
-            var guid = Guid.Empty;
-            var quantity = 0;
-
-            foreach (XmlNode childNode in menuNode.ChildNodes)
-            {
-                switch (childNode.Name)
-                {
-                    case "content":
-                        guid = XmlConvert.ToGuid(childNode.SelectSingleNode("m:properties/d:Id", manager).InnerText);
-                        quantity = Convert.ToInt32(childNode.SelectSingleNode("m:properties/d:Quantity", manager).InnerText);
-                        break;
-                }
-            }
-
-            return new GrillMenuQuantity(guid, quantity);
-        }
-
-        private static GrillMenuItem ParseGrillMenuItem(XmlNode menuNode, XmlNamespaceManager manager)
-        {
-            var menuName = string.Empty;
-            var guid = Guid.Empty;
-            var length = 0;
-            var width = 0;
-            var duration = TimeSpan.Zero;
-
-            foreach (XmlNode childNode in menuNode.ChildNodes)
-            {
-                switch (childNode.Name)
-                {
-                    case "content":
-                        menuName = childNode.SelectSingleNode("m:properties/d:Name", manager).InnerText;
-                        guid = XmlConvert.ToGuid(childNode.SelectSingleNode("m:properties/d:Id", manager).InnerText);
-                        length = Convert.ToInt32(childNode.SelectSingleNode("m:properties/d:Length", manager).InnerText);
-                        width = Convert.ToInt32(childNode.SelectSingleNode("m:properties/d:Width", manager).InnerText);
-                        duration = XmlConvert.ToTimeSpan(childNode.SelectSingleNode("m:properties/d:Duration", manager).InnerText);
-                        break;
-                }
-            }
-
-            return new GrillMenuItem(guid, menuName, length, width, duration);
-        }
-
-        /// <summary>
-        /// The parse menu.
-        /// </summary>
-        /// <param name="menuNode">
-        /// The menu node.
-        /// </param>
-        /// <param name="manager">
-        /// The manager.
-        /// </param>
-        /// <returns>
-        /// The <see cref="GrillMenu"/>.
-        /// </returns>
-        private static GrillMenu ParseMenu(XmlNode menuNode, XmlNamespaceManager manager)
-        {
-            var menuName = string.Empty;
-            var guid = Guid.Empty;
-
-            foreach (XmlNode childNode in menuNode.ChildNodes)
-            {
-                switch (childNode.Name)
-                {
-                    case "content":
-                        menuName = childNode.SelectSingleNode("m:properties/d:Name", manager).InnerText;
-                        guid = XmlConvert.ToGuid(childNode.SelectSingleNode("m:properties/d:Id", manager).InnerText);
-                        break;
-                }
-            }
-
-            return new GrillMenu(guid, menuName);
-        }
-
         /// <summary>
         /// The create xml manager.
         /// </summary>

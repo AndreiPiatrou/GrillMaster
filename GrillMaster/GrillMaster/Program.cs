@@ -27,10 +27,7 @@ namespace GrillMaster
         /// <summary>
         /// The main.
         /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        private static void Main(string[] args)
+        private static void Main()
         {
             Console.WriteLine("User name: {0}", UserName);
             Console.WriteLine("Password:  {0}", Password);
@@ -42,6 +39,8 @@ namespace GrillMaster
             Console.ReadKey();
         }
 
+        /// <summary>Load all menus` info, fill and print it.</summary>
+        /// <param name="menus">The menus.</param>
         private static void LoadAllMenus(IEnumerable<GrillMenu> menus)
         {
             foreach (var grillMenu in menus)
@@ -53,8 +52,13 @@ namespace GrillMaster
                 {
                     var menuItem = GMRequester.LoadGrillMenuItems(grillMenuQuantity.GetMenuItemLink)[0];
                     grillMenu.MenuItems.Add(new Tuple<int, GrillMenuItem>(grillMenuQuantity.Quantity, menuItem));
-                    Console.WriteLine("{0} * {1} ({2}x{3}. Duration:{4})", grillMenuQuantity.Quantity, menuItem.Name,
-                        menuItem.Height, menuItem.Width, menuItem.PrepareDuration);
+                    Console.WriteLine(
+                        "{0} * {1} ({2}x{3}. Duration:{4})",
+                        grillMenuQuantity.Quantity,
+                        menuItem.Name,
+                        menuItem.Height,
+                        menuItem.Width,
+                        menuItem.PrepareDuration);
                 }
 
                 Console.WriteLine();

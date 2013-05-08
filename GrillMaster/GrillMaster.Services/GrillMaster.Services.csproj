@@ -40,15 +40,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parsers\XmlParser.cs" />
-    <Compile Include="Protocol\GMProtocol.cs" />
+    <Compile Include="Parsers\XmlParser.Menu.cs" />
+    <Compile Include="Parsers\XmlParser.MenuItem.cs" />
+    <Compile Include="Parsers\XmlParser.MenuQuantity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Protocol\GMProtocol.Menu.cs" />
+    <Compile Include="Requester\GMRequester.Menu.cs" />
     <Compile Include="Requester\GMRequester.cs" />
+    <Compile Include="Requester\GMRequester.MenuItem.cs" />
+    <Compile Include="Requester\GMRequester.MenuQuantity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
