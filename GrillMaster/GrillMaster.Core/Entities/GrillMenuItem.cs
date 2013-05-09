@@ -16,7 +16,7 @@ namespace GrillMaster.Core.Entities
 
         private readonly Guid id;
         private readonly string name;
-        private readonly GrillRectangle _rectangleOnGrill = new GrillRectangle();
+        private readonly GrillRectangle _rectangleOnGrill;
         private TimeSpan prepareDuration;
         private bool isInverted;
 
@@ -28,9 +28,8 @@ namespace GrillMaster.Core.Entities
         {
             this.id = id;
             this.name = name;
-            _rectangleOnGrill.YLength = height;
-            _rectangleOnGrill.XLength = width;
             this.prepareDuration = prepareDuration;
+            _rectangleOnGrill = new GrillRectangle { YLength = height, XLength = width };
         }
 
         #endregion
@@ -90,9 +89,7 @@ namespace GrillMaster.Core.Entities
 
         public GrillMenuItem Clone()
         {
-            var clone = new GrillMenuItem(id, name, Height, Width, TimeSpan.FromSeconds(prepareDuration.TotalSeconds));
-
-            return clone;
+            return new GrillMenuItem(id, name, Height, Width, TimeSpan.FromSeconds(prepareDuration.TotalSeconds));
         }
 
         public void SetItemPositionOnGrill(int x, int y)

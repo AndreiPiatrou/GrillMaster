@@ -13,7 +13,7 @@ namespace GrillMaster
     /// <summary>
     /// The program.
     /// </summary>
-    public class Program
+    public static class Program
     {
         #region [Constants]
 
@@ -26,10 +26,6 @@ namespace GrillMaster
         /// The password.
         /// </summary>
         private const string Password = "Pjxi6";
-
-        private const int GrillWidth = 30;
-
-        private const int GrillHeigth = 20;
 
         #endregion
 
@@ -45,36 +41,41 @@ namespace GrillMaster
             LoadMenusAndPrintIt(menus);
 
             var grill = new Grill();
-            var menuItems = GetAllMenuItems(menus.First()).OrderBy(i => i.Square).ThenBy(i => i.PrepareDuration).ToList();
+            var menuItems = GetAllMenuItems(menus.First()).ToList();
+            var totalPrepareTime = TimeSpan.Zero;
             do
             {
-                grill = FillGrill(grill, menuItems);
-                grill.PrintGrill();
-                var preparedItems = grill.GetFirstPreparedItems();
-                foreach (var firstPreparedItem in preparedItems)
-                {
-                    menuItems.Remove(firstPreparedItem);
-                }
-                Console.WriteLine("Press any key to go to the next step...");
-                Console.ReadKey();
+                TimeSpan prepareTime;
+                PrintNextStepInfo();
+
+                var addedOnGrillItemsCount = grill.FillGrillItems(menuItems).Count(); // Fill items on grill.
+                Console.WriteLine("Added {0} from {1}", addedOnGrillItemsCount, menuItems.Count);
+                grill.PrintGrill(); // Print grill in console.
+
+                grill.GetNextPreparedItems(out prepareTime); // Get next prepare iteration.
+                totalPrepareTime += prepareTime; // Sum all prepare time.
+                var preparedItemsCount = menuItems.RemoveAll(i => i.IsPrepared); // Remove prepared items from main collection.
+                
+                grill.ClearMenuItemsOnGrill(); // Clear grill items for next iteration.
+                Console.WriteLine("Prepared items {0} from {1}", preparedItemsCount, addedOnGrillItemsCount);
 
             } while (menuItems.Any());
 
-            Console.ReadKey();
+            PrintFinishInfo(totalPrepareTime);
         }
 
-        private static Grill FillGrill(Grill grill, IEnumerable<GrillMenuItem> menuItems)
+        private static void PrintNextStepInfo()
         {
-            foreach (var grillMenuItem in menuItems)
-            {
-                if (grill.AddMenuItemIfCan(grillMenuItem))
-                {
-                    Console.WriteLine("{0} added. ({1},{2})", grillMenuItem.Name, grillMenuItem.X, grillMenuItem.Y);
-                    Console.ReadKey();
-                }
-            }
+            Console.WriteLine("Press any key to go to the next step...");
+            Console.ReadKey();
+            Console.Clear();
+        }
 
-            return grill;
+        private static void PrintFinishInfo(TimeSpan totalPrepareTime)
+        {
+            Console.WriteLine("Menu is prepared! Congratulations! Have a good dinner!");
+            Console.WriteLine("Total prepare time:{0}", totalPrepareTime);
+            Console.ReadKey();
         }
 
         #region [Help methods]
@@ -121,7 +122,7 @@ namespace GrillMaster
                 }
                 // todo: remove after whole implementation.
                 return;
-                Console.WriteLine();
+                // Console.WriteLine();
             }
         }
 
