@@ -42,39 +42,56 @@ namespace GrillMaster
             Console.WriteLine("Password:  {0}", Password);
             GMRequester.InitRequester(UserName, Password);
             var menus = GMRequester.LoadGrillMenus();
-
             LoadMenusAndPrintIt(menus);
 
+            var grill = new Grill();
+            var menuItems = GetAllMenuItems(menus.First()).OrderBy(i => i.Square).ThenBy(i => i.PrepareDuration).ToList();
+            do
+            {
+                grill = FillGrill(grill, menuItems);
+                grill.PrintGrill();
+                var preparedItems = grill.GetFirstPreparedItems();
+                foreach (var firstPreparedItem in preparedItems)
+                {
+                    menuItems.Remove(firstPreparedItem);
+                }
+                Console.WriteLine("Press any key to go to the next step...");
+                Console.ReadKey();
+
+            } while (menuItems.Any());
 
             Console.ReadKey();
         }
 
-        private void Optimize(GrillMenu menu)
+        private static Grill FillGrill(Grill grill, IEnumerable<GrillMenuItem> menuItems)
         {
-            var resultCollection = GetAllMenuItems(menu);
+            foreach (var grillMenuItem in menuItems)
+            {
+                if (grill.AddMenuItemIfCan(grillMenuItem))
+                {
+                    Console.WriteLine("{0} added. ({1},{2})", grillMenuItem.Name, grillMenuItem.X, grillMenuItem.Y);
+                    Console.ReadKey();
+                }
+            }
 
+            return grill;
         }
-        
+
         #region [Help methods]
-
-        private IEnumerable<GrillMenuItem> FindFIrstCollection(List<GrillMenuItem> items)
-        {
-            
-        }
 
         /// <summary>
         ///     Get all menu items.
         /// </summary>
         /// <param name="menu">Grill menu.</param>
         /// <returns>All items in menu.</returns>
-        private List<GrillMenuItem> GetAllMenuItems(GrillMenu menu)
+        private static IEnumerable<GrillMenuItem> GetAllMenuItems(GrillMenu menu)
         {
             var resultCollection = new List<GrillMenuItem>();
             foreach (var menuItem in menu.MenuItems)
             {
-                for (int i = 0; i < menuItem.Item1; i++)
+                for (var i = 0; i < menuItem.Item1; i++)
                 {
-                    resultCollection.Add(menuItem.Item2);
+                    resultCollection.Add(menuItem.Item2.Clone());
                 }
             }
 
@@ -102,7 +119,8 @@ namespace GrillMaster
                         menuItem.Width,
                         menuItem.PrepareDuration);
                 }
-
+                // todo: remove after whole implementation.
+                return;
                 Console.WriteLine();
             }
         }

@@ -16,11 +16,9 @@ namespace GrillMaster.Core.Entities
 
         private readonly Guid id;
         private readonly string name;
-        private readonly int height;
-        private readonly int width;
-        private readonly TimeSpan prepareDuration;
-        private int x;
-        private int y;
+        private readonly GrillRectangle _rectangleOnGrill = new GrillRectangle();
+        private TimeSpan prepareDuration;
+        private bool isInverted;
 
         #endregion
 
@@ -30,8 +28,8 @@ namespace GrillMaster.Core.Entities
         {
             this.id = id;
             this.name = name;
-            this.height = height;
-            this.width = width;
+            _rectangleOnGrill.YLength = height;
+            _rectangleOnGrill.XLength = width;
             this.prepareDuration = prepareDuration;
         }
 
@@ -56,31 +54,67 @@ namespace GrillMaster.Core.Entities
 
         public int Width
         {
-            get { return width; }
+            get { return !isInverted ? _rectangleOnGrill.XLength : _rectangleOnGrill.YLength; }
         }
 
         public int Height
         {
-            get { return height; }
+            get { return !isInverted ? _rectangleOnGrill.XLength : _rectangleOnGrill.YLength; }
         }
 
         public TimeSpan PrepareDuration
         {
             get { return prepareDuration; }
+            set { prepareDuration = value; }
         }
 
         public int X
         {
-            get { return x; }
-            set { x = value; }
+            get { return _rectangleOnGrill.X; }
+            set { _rectangleOnGrill.X = value; }
         }
 
         public int Y
         {
-            get { return y; }
-            set { y = value; }
+            get { return _rectangleOnGrill.Y; }
+            set { _rectangleOnGrill.Y = value; }
+        }
+
+        public bool IsInverted
+        {
+            get { return isInverted; }
+            set { isInverted = value; }
         }
 
         #endregion
+
+        public GrillMenuItem Clone()
+        {
+            var clone = new GrillMenuItem(id, name, Height, Width, TimeSpan.FromSeconds(prepareDuration.TotalSeconds));
+
+            return clone;
+        }
+
+        public void SetItemPositionOnGrill(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public int Square
+        {
+            get { return X * Y; }
+        }
+
+        public bool IsBusyPoint(int xCoordinate, int yCoordinate)
+        {
+            return (xCoordinate >= X && xCoordinate < (X + Width))
+                && (yCoordinate >= Y && yCoordinate < (Y + Height));
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - ({1},{2}) - {3}x{4}", name, X, Y, Height, Width);
+        }
     }
 }

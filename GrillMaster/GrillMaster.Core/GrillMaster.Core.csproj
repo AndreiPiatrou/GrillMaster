@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Grill.cs" />
     <Compile Include="Entities\GrillMenu.cs" />
     <Compile Include="Entities\GrillMenuItem.cs" />
     <Compile Include="Entities\GrillMenuQuantity.cs" />
+    <Compile Include="Entities\GrillPoint.cs" />
+    <Compile Include="Entities\GrillSquare.cs" />
     <Compile Include="Entities\IIdentify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
