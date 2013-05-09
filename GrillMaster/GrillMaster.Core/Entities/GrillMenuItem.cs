@@ -53,12 +53,12 @@ namespace GrillMaster.Core.Entities
 
         public int Width
         {
-            get { return !isInverted ? _rectangleOnGrill.XLength : _rectangleOnGrill.YLength; }
+            get { return isInverted ? _rectangleOnGrill.YLength : _rectangleOnGrill.XLength; }
         }
 
         public int Height
         {
-            get { return !isInverted ? _rectangleOnGrill.XLength : _rectangleOnGrill.YLength; }
+            get { return isInverted ? _rectangleOnGrill.XLength : _rectangleOnGrill.YLength; }
         }
 
         public TimeSpan PrepareDuration
@@ -100,7 +100,7 @@ namespace GrillMaster.Core.Entities
 
         public int Square
         {
-            get { return X * Y; }
+            get { return _rectangleOnGrill.XLength * _rectangleOnGrill.YLength; }
         }
 
         public bool IsBusyPoint(int xCoordinate, int yCoordinate)

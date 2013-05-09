@@ -48,6 +48,10 @@ namespace GrillMaster
                 TimeSpan prepareTime;
                 PrintNextStepInfo();
 
+                var totalItemsSquare = menuItems.Sum(grillMenuItem => grillMenuItem.Square);
+
+                Console.WriteLine("Total grill quare - {0}, total items square - {1}", grill.Square, totalItemsSquare);
+
                 var addedOnGrillItemsCount = grill.FillGrillItems(menuItems).Count(); // Fill items on grill.
                 Console.WriteLine("Added {0} from {1}", addedOnGrillItemsCount, menuItems.Count);
                 grill.PrintGrill(); // Print grill in console.

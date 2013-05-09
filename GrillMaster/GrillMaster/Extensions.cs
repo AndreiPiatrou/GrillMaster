@@ -11,11 +11,11 @@ namespace GrillMaster
     {
         public static void PrintGrill(this Grill grill)
         {
-            Console.WriteLine("--------------------------------");
-            for (int i = 0; i < 20; i++)
+            Console.WriteLine(@"/------------------------------\");
+            for (var i = 0; i < Grill.Heigth; i++)
             {
                 Console.Write("|");
-                for (int j = 0; j < 30; j++)
+                for (var j = 0; j < Grill.Width; j++)
                 {
                     Console.Write(grill.IsBusyPoint(j, i) ? "x" : ".");
                 }
@@ -23,7 +23,7 @@ namespace GrillMaster
                 Console.Write("|\n");
             }
 
-            Console.WriteLine("--------------------------------");
+            Console.WriteLine(@"\------------------------------/");
         }
     }
 }

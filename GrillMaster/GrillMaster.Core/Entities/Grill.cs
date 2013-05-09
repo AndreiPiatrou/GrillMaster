@@ -18,8 +18,8 @@ namespace GrillMaster.Core.Entities
     {
         #region [Constants]
 
-        private const int Heigth = 20;
-        private const int Width = 30;
+        public const int Heigth = 20;
+        public const int Width = 30;
 
         #endregion
 
@@ -37,6 +37,11 @@ namespace GrillMaster.Core.Entities
         public List<GrillMenuItem> MenuItemsOnGrill
         {
             get { return _menuItemsOnGrill; }
+        }
+
+        public int Square
+        {
+            get { return Heigth * Width; }
         }
 
         #endregion
@@ -62,9 +67,32 @@ namespace GrillMaster.Core.Entities
         public IEnumerable<GrillMenuItem> FillGrillItems(IEnumerable<GrillMenuItem> menuItems)
         {
             _menuItemsOnGrill = new List<GrillMenuItem>();
-            foreach (var grillMenuItem in menuItems.OrderBy(i => i.Square))
+            foreach (var grillMenuItem in menuItems.OrderByDescending(i => i.Square).ToList())
             {
-                AddMenuItemIfCan(grillMenuItem);
+                if (AddMenuItemIfCan(grillMenuItem))
+                {
+                    Console.WriteLine("{0}x{1} on {2},{3}",
+                        grillMenuItem.Height,
+                        grillMenuItem.Width,
+                        grillMenuItem.X,
+                        grillMenuItem.Y);
+
+                    Console.WriteLine(@"/------------------------------\");
+                    for (var i = 0; i < Heigth; i++)
+                    {
+                        Console.Write("|");
+                        for (var j = 0; j < Width; j++)
+                        {
+                            Console.Write(IsBusyPoint(j, i) ? "x" : ".");
+                        }
+
+                        Console.Write("|\n");
+                    }
+
+                    Console.WriteLine(@"\------------------------------/");
+                    Console.ReadKey();
+                }
+
             }
 
             return _menuItemsOnGrill;
@@ -114,7 +142,7 @@ namespace GrillMaster.Core.Entities
                     return false;
                 }
 
-                menuItem.IsInverted = true;
+                menuItem.IsInverted = !menuItem.IsInverted;
                 menuItem.SetItemPositionOnGrill(pointForItem.X, pointForItem.Y);
                 _menuItemsOnGrill.Add(menuItem);
                 return true;
@@ -127,22 +155,36 @@ namespace GrillMaster.Core.Entities
 
         private GrillPoint GetFirstFreeRectangle(int heigth, int width)
         {
-            for (var i = 0; i < Heigth - heigth + 1; i++)
+            for (var i = 0; i <= Heigth - heigth; i++)
             {
-                for (var j = 0; j < Width - width + 1; j++)
+                for (var j = 0; j <= Width - width; j++)
                 {
                     if (IsBusyPoint(j, i))
                     {
                         continue;
                     }
 
+                    var needBreak = false;
                     for (int k = i; k < i + heigth; k++)
                     {
+                        if (needBreak)
+                        {
+                            break;
+                        }
+
                         for (int l = j; l < j + width; l++)
                         {
-                            if (IsBusyPoint(l, k)) continue;
-                            return new GrillPoint(l, k);
+                            if (IsBusyPoint(l, k))
+                            {
+                                needBreak = true;
+                                break;
+                            }
                         }
+                    }
+
+                    if (!needBreak)
+                    {
+                        return new GrillPoint(j, i);
                     }
                 }
             }
