@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GrillMaster.Core.Entities;
 using GrillMaster.Services.Requester;
 
@@ -14,6 +15,8 @@ namespace GrillMaster
     /// </summary>
     public class Program
     {
+        #region [Constants]
+
         /// <summary>
         /// The user name.
         /// </summary>
@@ -23,6 +26,12 @@ namespace GrillMaster
         /// The password.
         /// </summary>
         private const string Password = "Pjxi6";
+
+        private const int GrillWidth = 30;
+
+        private const int GrillHeigth = 20;
+
+        #endregion
 
         /// <summary>
         /// The main.
@@ -34,14 +43,47 @@ namespace GrillMaster
             GMRequester.InitRequester(UserName, Password);
             var menus = GMRequester.LoadGrillMenus();
 
-            LoadAllMenus(menus);
+            LoadMenusAndPrintIt(menus);
+
 
             Console.ReadKey();
         }
 
+        private void Optimize(GrillMenu menu)
+        {
+            var resultCollection = GetAllMenuItems(menu);
+
+        }
+        
+        #region [Help methods]
+
+        private IEnumerable<GrillMenuItem> FindFIrstCollection(List<GrillMenuItem> items)
+        {
+            
+        }
+
+        /// <summary>
+        ///     Get all menu items.
+        /// </summary>
+        /// <param name="menu">Grill menu.</param>
+        /// <returns>All items in menu.</returns>
+        private List<GrillMenuItem> GetAllMenuItems(GrillMenu menu)
+        {
+            var resultCollection = new List<GrillMenuItem>();
+            foreach (var menuItem in menu.MenuItems)
+            {
+                for (int i = 0; i < menuItem.Item1; i++)
+                {
+                    resultCollection.Add(menuItem.Item2);
+                }
+            }
+
+            return resultCollection;
+        }
+
         /// <summary>Load all menus` info, fill and print it.</summary>
         /// <param name="menus">The menus.</param>
-        private static void LoadAllMenus(IEnumerable<GrillMenu> menus)
+        private static void LoadMenusAndPrintIt(IEnumerable<GrillMenu> menus)
         {
             foreach (var grillMenu in menus)
             {
@@ -64,5 +106,7 @@ namespace GrillMaster
                 Console.WriteLine();
             }
         }
+
+        #endregion
     }
 }

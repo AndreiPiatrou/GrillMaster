@@ -1,6 +1,7 @@
 ﻿#region [Imports]
 
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 #endregion
 
@@ -18,6 +19,8 @@ namespace GrillMaster.Core.Entities
         private readonly int height;
         private readonly int width;
         private readonly TimeSpan prepareDuration;
+        private int x;
+        private int y;
 
         #endregion
 
@@ -35,6 +38,11 @@ namespace GrillMaster.Core.Entities
         #endregion
 
         #region [Properties]
+
+        public bool IsPrepared
+        {
+            get { return PrepareDuration == TimeSpan.Zero; }
+        }
 
         public Guid Id
         {
@@ -59,6 +67,18 @@ namespace GrillMaster.Core.Entities
         public TimeSpan PrepareDuration
         {
             get { return prepareDuration; }
+        }
+
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
         }
 
         #endregion
