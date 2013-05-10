@@ -52,9 +52,18 @@ namespace GrillMaster
 
                 requestadToExit = RequestToExit();  // Ask to exit.
 
+                if (!requestadToExit)
+                {
+                    PrintMenus(menus);
+                }
+
             } while (!requestadToExit);
         }
 
+        /// <summary>
+        ///     Request user to exit.
+        /// </summary>
+        /// <returns>Request result.</returns>
         private static bool RequestToExit()
         {
             while (true)
@@ -156,30 +165,48 @@ namespace GrillMaster
             return resultCollection;
         }
 
-        /// <summary>Load all menus` info, fill and print it.</summary>
+        /// <summary>
+        ///     Load all menus` info, fill and print it.</summary>
         /// <param name="menus">The menus.</param>
         private static void LoadMenusAndPrintThem(IEnumerable<GrillMenu> menus)
         {
             foreach (var grillMenu in menus)
             {
-                Console.WriteLine("{0}.", grillMenu.Name);
                 var quantities = GMRequester.LoadGrillMenuQuantities(grillMenu.GetMenuQuantitiesLink);
 
                 foreach (var grillMenuQuantity in quantities)
                 {
                     var menuItem = GMRequester.LoadGrillMenuItems(grillMenuQuantity.GetMenuItemLink)[0];
                     grillMenu.MenuItems.Add(new Tuple<int, GrillMenuItem>(grillMenuQuantity.Quantity, menuItem));
-                    Console.WriteLine(
-                        "{0} * {1} ({2}x{3}. Duration:{4})",
-                        grillMenuQuantity.Quantity,
-                        menuItem.Name,
-                        menuItem.Height,
-                        menuItem.Width,
-                        menuItem.PrepareDuration);
                 }
 
-                Console.WriteLine();
+                PrintMenu(grillMenu);
             }
+        }
+
+        private static void PrintMenus(IEnumerable<GrillMenu> menus)
+        {
+            foreach (var grillMenu in menus)
+            {
+                PrintMenu(grillMenu);
+            }
+        }
+
+        private static void PrintMenu(GrillMenu menu)
+        {
+            Console.WriteLine("{0}.", menu.Name);
+            foreach (var menuItem in menu.MenuItems)
+            {
+                Console.WriteLine(
+                        "{0} * {1} ({2}x{3}. Duration:{4})",
+                        menuItem.Item1,
+                        menuItem.Item2.Name,
+                        menuItem.Item2.Height,
+                        menuItem.Item2.Width,
+                        menuItem.Item2.PrepareDuration);
+            }
+
+            Console.WriteLine();
         }
 
         #endregion
