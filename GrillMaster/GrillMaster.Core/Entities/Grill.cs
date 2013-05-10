@@ -71,12 +71,8 @@ namespace GrillMaster.Core.Entities
             {
                 if (AddMenuItemIfCan(grillMenuItem))
                 {
-                    Console.WriteLine("{0}x{1} on {2},{3}",
-                        grillMenuItem.Height,
-                        grillMenuItem.Width,
-                        grillMenuItem.X,
-                        grillMenuItem.Y);
-
+                    // todo: replace console output into Grill project.
+                    Console.WriteLine("Added {0}", grillMenuItem);
                     Console.WriteLine(@"/------------------------------\");
                     for (var i = 0; i < Heigth; i++)
                     {
@@ -91,6 +87,7 @@ namespace GrillMaster.Core.Entities
 
                     Console.WriteLine(@"\------------------------------/");
                     Console.ReadKey();
+                    Console.Clear();
                 }
 
             }

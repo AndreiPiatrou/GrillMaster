@@ -38,30 +38,84 @@ namespace GrillMaster
             Console.WriteLine("Password:  {0}", Password);
             GMRequester.InitRequester(UserName, Password);
             var menus = GMRequester.LoadGrillMenus();
-            LoadMenusAndPrintIt(menus);
-
             var grill = new Grill();
-            var menuItems = GetAllMenuItems(menus.First()).ToList();
+            LoadMenusAndPrintThem(menus);
+
+            bool requestadToExit;
+            do
+            {
+                var menuToPrepare = ChooseGrillMenu(menus); // Choose menu.
+                var menuItems = GetAllMenuItems(menuToPrepare).ToList(); // Get all menu items.
+
+                PrepareMenu(grill, menuItems); // Prepare menu.
+                grill.ClearMenuItemsOnGrill();
+
+                requestadToExit = RequestToExit();  // Ask to exit.
+
+            } while (!requestadToExit);
+        }
+
+        private static bool RequestToExit()
+        {
+            while (true)
+            {
+                Console.WriteLine("Do you want to repeat? [y/n]");
+                var key = Console.ReadKey();
+                Console.Clear();
+                if (key.Key == ConsoleKey.Y)
+                {
+                    return false;
+                }
+
+                if (key.Key == ConsoleKey.N)
+                {
+                    return true;
+                }
+
+                Console.Clear();
+                Console.WriteLine("Unknown input. Please retry.");
+            }
+        }
+
+        private static GrillMenu ChooseGrillMenu(List<GrillMenu> menus)
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter menu number to prepare.");
+                var menuNumder = Console.ReadLine();
+                var menuToPrepare = menus.FirstOrDefault(m => m.Name == menuNumder || m.Name == string.Format("Menu {0}", menuNumder));
+                if (menuToPrepare != null)
+                {
+                    return menuToPrepare;
+                }
+
+                Console.WriteLine("There is no menu with '{0}' name. Enter correct menu number.", menuNumder);
+            }
+        }
+
+        /// <summary>
+        ///     Prepare one menu.
+        /// </summary>
+        /// <param name="grill"></param>
+        /// <param name="menuItems"></param>
+        private static void PrepareMenu(Grill grill, List<GrillMenuItem> menuItems)
+        {
             var totalPrepareTime = TimeSpan.Zero;
             do
             {
                 TimeSpan prepareTime;
                 PrintNextStepInfo();
-
-                var totalItemsSquare = menuItems.Sum(grillMenuItem => grillMenuItem.Square);
-
-                Console.WriteLine("Total grill quare - {0}, total items square - {1}", grill.Square, totalItemsSquare);
-
                 var addedOnGrillItemsCount = grill.FillGrillItems(menuItems).Count(); // Fill items on grill.
                 Console.WriteLine("Added {0} from {1}", addedOnGrillItemsCount, menuItems.Count);
+
                 grill.PrintGrill(); // Print grill in console.
 
-                grill.GetNextPreparedItems(out prepareTime); // Get next prepare iteration.
+                grill.GetNextPreparedItems(out prepareTime); // Do next prepare iteration.
                 totalPrepareTime += prepareTime; // Sum all prepare time.
                 var preparedItemsCount = menuItems.RemoveAll(i => i.IsPrepared); // Remove prepared items from main collection.
-                
+
                 grill.ClearMenuItemsOnGrill(); // Clear grill items for next iteration.
-                Console.WriteLine("Prepared items {0} from {1}", preparedItemsCount, addedOnGrillItemsCount);
+                Console.WriteLine("Prepared items {0} from {1}. Prepare time: {2}", preparedItemsCount, addedOnGrillItemsCount, prepareTime);
 
             } while (menuItems.Any());
 
@@ -77,8 +131,7 @@ namespace GrillMaster
 
         private static void PrintFinishInfo(TimeSpan totalPrepareTime)
         {
-            Console.WriteLine("Menu is prepared! Congratulations! Have a good dinner!");
-            Console.WriteLine("Total prepare time:{0}", totalPrepareTime);
+            Console.WriteLine("Total menu prepare time:{0}", totalPrepareTime);
             Console.ReadKey();
         }
 
@@ -105,7 +158,7 @@ namespace GrillMaster
 
         /// <summary>Load all menus` info, fill and print it.</summary>
         /// <param name="menus">The menus.</param>
-        private static void LoadMenusAndPrintIt(IEnumerable<GrillMenu> menus)
+        private static void LoadMenusAndPrintThem(IEnumerable<GrillMenu> menus)
         {
             foreach (var grillMenu in menus)
             {
@@ -124,9 +177,8 @@ namespace GrillMaster
                         menuItem.Width,
                         menuItem.PrepareDuration);
                 }
-                // todo: remove after whole implementation.
-                return;
-                // Console.WriteLine();
+
+                Console.WriteLine();
             }
         }
 
